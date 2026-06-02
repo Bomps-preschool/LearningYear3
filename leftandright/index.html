@@ -1,12 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Left and Right Identification</title>
+<title>Left and Right Game</title>
 
 <style>
+
+/* PART 2 CSS WILL GO HERE */
+
+</style>
+
+</head>
+
+<body>
+
+<!-- START SCREEN -->
+
+<div id="startScreen" class="screen">
+
+<img
+src="assets/innovinelogo.png"
+class="logo"
+alt="Innovine Logo">
+
+<button
+class="startBtn"
+onclick="startGame()">
+START GAME
+</button>
+
+</div>
+
+<!-- GAME SCREEN -->
+
+<div id="gameScreen"
+class="screen hidden">
+
+<div class="scoreBoard">
+
+⭐ Score:
+<span id="score">0</span>
+
+</div>
+
+<div class="instruction"
+id="instruction">
+
+Tap LEFT
+
+</div>
+
+<div class="options">
+
+<!-- LEFT CARD -->
+
+<div class="optionBox">
+
+<div class="sideLabel">
+👈 LEFT
+</div>
+
+<div
+class="card"
+onclick="checkAnswer('left')">
+
+<img
+id="leftImg"
+src="assets/apple.jpg">
+
+</div>
+
+</div>
+
+<!-- RIGHT CARD -->
+
+<div class="optionBox">
+
+<div class="sideLabel">
+RIGHT 👉
+</div>
+
+<div
+class="card"
+onclick="checkAnswer('right')">
+
+<img
+id="rightImg"
+src="assets/bee.png">
+
+</div>
+
+</div>
+
+</div>
+
+<div
+id="feedback"
+class="feedback">
+
+</div>
+
+</div>
+
+<!-- FINISH SCREEN -->
+
+<div
+id="finishScreen"
+class="screen hidden">
+
+<div class="celebration">
+
+🎉 🎉 🎉
+
+</div>
+
+<h1>Great Job!</h1>
+
+<h2 id="finalScore"></h2>
+
+<button
+class="startBtn"
+onclick="restartGame()">
+
+PLAY AGAIN
+
+</button>
+
+</div>
+
+<!-- AUDIO FILES -->
+
+<audio
+id="correctSound"
+src="assets/correct.mp3">
+</audio>
+
+<audio
+id="wrongSound"
+src="assets/wrong.mp3">
+</audio>
+
+<audio
+id="clapSound"
+src="assets/claps.mp3">
+</audio>
+
+<script>
+
+/* PART 3 JAVASCRIPT WILL GO HERE */
+
+</script>
+
+</body>
+</html>
 *{
 margin:0;
 padding:0;
@@ -15,9 +164,12 @@ font-family:Arial, sans-serif;
 }
 
 body{
-background:#f7f9ff;
+background:linear-gradient(
+135deg,
+#dbeafe,
+#fef9c3
+);
 overflow:hidden;
-text-align:center;
 }
 
 .screen{
@@ -29,97 +181,112 @@ justify-content:center;
 align-items:center;
 }
 
+.hidden{
+display:none !important;
+}
+
+/* LOGO */
+
 .logo{
-width:180px;
-margin-bottom:20px;
+width:220px;
+max-width:80%;
+margin-bottom:30px;
 }
 
-h1{
-color:#1d4ed8;
-margin-bottom:15px;
-}
+/* BUTTON */
 
-.btn{
-padding:15px 35px;
-font-size:22px;
+.startBtn{
+padding:18px 40px;
+font-size:28px;
+font-weight:bold;
 border:none;
 border-radius:15px;
 background:#2563eb;
 color:white;
 cursor:pointer;
+transition:.3s;
 }
 
-.btn:hover{
+.startBtn:hover{
 transform:scale(1.05);
 }
 
-.hidden{
-display:none !important;
-}
+/* SCORE */
 
-.game-area{
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-}
-
-.score{
+.scoreBoard{
 position:absolute;
-top:15px;
-right:20px;
+top:20px;
+right:30px;
 font-size:28px;
 font-weight:bold;
+color:#1e40af;
+}
+
+/* INSTRUCTION */
+
+.instruction{
+font-size:50px;
+font-weight:bold;
+color:#111827;
+margin-bottom:40px;
+text-align:center;
+padding:10px;
+}
+
+/* OPTIONS */
+
+.options{
+display:flex;
+justify-content:center;
+align-items:flex-start;
+gap:80px;
+flex-wrap:wrap;
+}
+
+/* LEFT RIGHT LABELS */
+
+.sideLabel{
+font-size:36px;
+font-weight:bold;
+text-align:center;
+margin-bottom:15px;
 color:#2563eb;
 }
 
-.instruction{
-font-size:42px;
-font-weight:bold;
-margin-bottom:50px;
-color:#111827;
-}
+/* CARD */
 
-.tap-container{
+.card{
+width:340px;
+height:340px;
+background:white;
+border-radius:25px;
+box-shadow:0 8px 20px rgba(0,0,0,.15);
 display:flex;
-width:100%;
-justify-content:space-evenly;
-align-items:center;
-}
-
-.side{
-width:250px;
-height:250px;
-border-radius:30px;
-display:flex;
-align-items:center;
 justify-content:center;
-font-size:40px;
-font-weight:bold;
+align-items:center;
 cursor:pointer;
 transition:.3s;
-user-select:none;
 }
 
-.side:hover{
+.card:hover{
 transform:scale(1.05);
 }
 
-.left{
-background:#93c5fd;
+.card img{
+width:260px;
+height:260px;
+object-fit:contain;
+pointer-events:none;
 }
 
-.right{
-background:#fca5a5;
-}
+/* FEEDBACK */
 
 .feedback{
-font-size:45px;
-margin-top:40px;
-height:60px;
+height:70px;
+margin-top:30px;
+font-size:48px;
 font-weight:bold;
+text-align:center;
 }
 
 .correct{
@@ -130,213 +297,467 @@ color:green;
 color:red;
 }
 
-.celebrate{
-font-size:80px;
+/* FINISH SCREEN */
+
+.celebration{
+font-size:90px;
+margin-bottom:20px;
 animation:bounce 1s infinite;
 }
 
-@keyframes bounce{
-0%,100%{transform:translateY(0);}
-50%{transform:translateY(-20px);}
+#finalScore{
+margin:20px;
+font-size:36px;
+color:#1e40af;
 }
-</style>
-</head>
 
-<body>
+/* ANIMATION */
 
-<!-- START SCREEN -->
-<div id="startScreen" class="screen">
+@keyframes bounce{
 
-<img src="assets/innovinelogo.png"
-class="logo"
-onerror="this.style.display='none'">
+0%{
+transform:translateY(0);
+}
 
-<h1>Left and Right</h1>
+50%{
+transform:translateY(-20px);
+}
 
-<button class="btn" onclick="startGame()">
-Start Game
-</button>
+100%{
+transform:translateY(0);
+}
 
-</div>
+}
 
-<!-- GAME SCREEN -->
-<div id="gameScreen" class="screen hidden">
+/* MOBILE */
 
-<div class="score">
-⭐ Score: <span id="score">0</span>
-</div>
+@media(max-width:900px){
 
-<div class="game-area">
+.options{
+gap:30px;
+}
 
-<div class="instruction" id="instruction">
-Tap LEFT
-</div>
+.card{
+width:250px;
+height:250px;
+}
 
-<div class="tap-container">
+.card img{
+width:180px;
+height:180px;
+}
 
-<div class="side left"
-onclick="checkAnswer('left')">
-LEFT
-</div>
+.instruction{
+font-size:34px;
+}
 
-<div class="side right"
-onclick="checkAnswer('right')">
-RIGHT
-</div>
+.sideLabel{
+font-size:26px;
+}
 
-</div>
+.scoreBoard{
+font-size:22px;
+}
 
-<div class="feedback" id="feedback"></div>
+}
+const images = [
 
-</div>
+"assets/ant.png",
+"assets/apple.jpg",
+"assets/arrow.png",
+"assets/ballonorange.png",
+"assets/bee.png",
+"assets/bow.png",
+"assets/boy.png",
+"assets/brinjal.png",
+"assets/butterfly.jpg",
+"assets/carorange.png",
+"assets/grapes.png",
+"assets/green.jpg",
+"assets/orange.jpg",
+"assets/orangefruit.png",
+"assets/parrot.png",
+"assets/purple.png",
+"assets/tshirt.png"
 
-</div>
-
-<!-- CELEBRATION SCREEN -->
-<div id="endScreen" class="screen hidden">
-
-<div class="celebrate">
-🎉🎉🎉
-</div>
-
-<h1>Great Job!</h1>
-
-<h2 id="finalScore"></h2>
-
-<br>
-
-<button class="btn" onclick="restartGame()">
-Play Again
-</button>
-
-</div>
-
-<audio id="correctSound" src="assets/correct.mp3"></audio>
-<audio id="wrongSound" src="assets/wrong.mp3"></audio>
-<audio id="clapSound" src="assets/clap.mp3"></audio>
-
-<script>
+];
 
 let score = 0;
 let round = 0;
 let totalRounds = 10;
+let correctAnswer = "";
 
-let currentAnswer = "";
-
-const instructions = [
-"Tap LEFT",
-"Tap RIGHT"
-];
-
-function speak(text){
-
-if('speechSynthesis' in window){
-
-speechSynthesis.cancel();
-
-let utterance = new SpeechSynthesisUtterance(text);
-utterance.rate = 0.9;
-utterance.pitch = 1.1;
-
-speechSynthesis.speak(utterance);
-
-}
-}
+/* START GAME */
 
 function startGame(){
 
-document.getElementById("startScreen").classList.add("hidden");
-document.getElementById("gameScreen").classList.remove("hidden");
+document.getElementById("startScreen")
+.classList.add("hidden");
+
+document.getElementById("gameScreen")
+.classList.remove("hidden");
 
 nextRound();
 
 }
+
+/* SPEAK */
+
+function speak(text){
+
+if("speechSynthesis" in window){
+
+speechSynthesis.cancel();
+
+const speech =
+new SpeechSynthesisUtterance(text);
+
+speech.rate = 0.9;
+speech.pitch = 1;
+
+window.speechSynthesis.speak(speech);
+
+}
+
+}
+
+/* RANDOM IMAGE */
+
+function randomImage(){
+
+return images[
+Math.floor(
+Math.random() * images.length
+)
+];
+
+}
+
+/* NEXT ROUND */
 
 function nextRound(){
 
 if(round >= totalRounds){
+
 finishGame();
 return;
+
 }
 
 round++;
 
-const instruction =
-instructions[Math.floor(Math.random()*2)];
+let leftImage = randomImage();
+let rightImage = randomImage();
 
-document.getElementById("instruction").innerText =
-instruction;
+while(leftImage === rightImage){
 
-currentAnswer =
-instruction.includes("LEFT")
-? "left"
-: "right";
-
-document.getElementById("feedback").innerHTML="";
-
-speak(instruction);
+rightImage = randomImage();
 
 }
 
-function checkAnswer(choice){
+document.getElementById("leftImg").src =
+leftImage;
 
-if(choice===currentAnswer){
+document.getElementById("rightImg").src =
+rightImage;
 
-score++;
+const askLeft =
+Math.random() < 0.5;
 
-document.getElementById("score").innerText=score;
+if(askLeft){
 
-document.getElementById("feedback").innerHTML=
-"<span class='correct'>✔ Correct!</span>";
+correctAnswer = "left";
 
-document.getElementById("correctSound").play();
+document.getElementById("instruction")
+.innerHTML =
+"👈 TAP THE LEFT PICTURE";
+
+speak("Tap the left picture");
 
 }else{
 
-document.getElementById("feedback").innerHTML=
-"<span class='wrong'>✖ Try Again!</span>";
+correctAnswer = "right";
 
-document.getElementById("wrongSound").play();
+document.getElementById("instruction")
+.innerHTML =
+"👉 TAP THE RIGHT PICTURE";
+
+speak("Tap the right picture");
 
 }
 
-setTimeout(()=>{
+document.getElementById("feedback")
+.innerHTML = "";
+
+}
+
+/* CHECK ANSWER */
+
+function checkAnswer(choice){
+
+if(choice === correctAnswer){
+
+score++;
+
+document.getElementById("score")
+.innerHTML = score;
+
+document.getElementById("feedback")
+.innerHTML =
+"<span class='correct'>✔ Correct!</span>";
+
+const correctSound =
+document.getElementById("correctSound");
+
+correctSound.currentTime = 0;
+correctSound.play();
+
+}else{
+
+document.getElementById("feedback")
+.innerHTML =
+"<span class='wrong'>✖ Try Again!</span>";
+
+const wrongSound =
+document.getElementById("wrongSound");
+
+wrongSound.currentTime = 0;
+wrongSound.play();
+
+}
+
+setTimeout(function(){
+
 nextRound();
+
 },1200);
 
 }
 
+/* FINISH */
+
 function finishGame(){
 
-document.getElementById("gameScreen").classList.add("hidden");
+document.getElementById("gameScreen")
+.classList.add("hidden");
 
-document.getElementById("endScreen").classList.remove("hidden");
+document.getElementById("finishScreen")
+.classList.remove("hidden");
 
-document.getElementById("finalScore").innerHTML =
-"Your Score: " + score + " / " + totalRounds;
+document.getElementById("finalScore")
+.innerHTML =
+"Score: " +
+score +
+" / " +
+totalRounds;
 
-document.getElementById("clapSound").play();
+const clapSound =
+document.getElementById("clapSound");
 
-speak("Great Job");
+clapSound.currentTime = 0;
+clapSound.play();
+
+speak(
+"Great Job! You finished the game."
+);
 
 }
 
+/* PLAY AGAIN */
+
 function restartGame(){
 
-score=0;
-round=0;
+score = 0;
+round = 0;
 
-document.getElementById("score").innerText="0";
+document.getElementById("score")
+.innerHTML = "0";
 
-document.getElementById("endScreen").classList.add("hidden");
+document.getElementById("finishScreen")
+.classList.add("hidden");
 
-document.getElementById("gameScreen").classList.remove("hidden");
+document.getElementById("gameScreen")
+.classList.remove("hidden");
 
 nextRound();
 
 }
+/* CONFETTI */
 
-</script>
+.confetti{
+position:absolute;
+font-size:40px;
+animation:fall 4s linear forwards;
+pointer-events:none;
+z-index:999;
+}
 
-</body>
-</html>
+@keyframes fall{
+
+0%{
+transform:translateY(-100px) rotate(0deg);
+opacity:1;
+}
+
+100%{
+transform:translateY(110vh) rotate(720deg);
+opacity:0;
+}
+
+}
+
+/* STAR BURST */
+
+.star{
+position:absolute;
+font-size:50px;
+pointer-events:none;
+animation:starPop 1s ease-out forwards;
+z-index:1000;
+}
+
+@keyframes starPop{
+
+0%{
+transform:scale(0);
+opacity:1;
+}
+
+100%{
+transform:scale(2);
+opacity:0;
+}
+
+}
+/* CONFETTI CELEBRATION */
+
+function launchConfetti(){
+
+const emojis = [
+"🎉",
+"⭐",
+"🌟",
+"✨",
+"🎊"
+];
+
+for(let i=0;i<40;i++){
+
+const confetti =
+document.createElement("div");
+
+confetti.className =
+"confetti";
+
+confetti.innerHTML =
+emojis[
+Math.floor(
+Math.random()*emojis.length
+)
+];
+
+confetti.style.left =
+Math.random()*100 + "vw";
+
+confetti.style.animationDelay =
+Math.random()*2 + "s";
+
+document.body.appendChild(
+confetti
+);
+
+setTimeout(()=>{
+
+confetti.remove();
+
+},5000);
+
+}
+
+}
+
+/* STAR EFFECT */
+
+function createStarBurst(){
+
+const star =
+document.createElement("div");
+
+star.className = "star";
+
+star.innerHTML = "⭐";
+
+star.style.left =
+(40 + Math.random()*20) + "vw";
+
+star.style.top =
+(40 + Math.random()*10) + "vh";
+
+document.body.appendChild(star);
+
+setTimeout(()=>{
+
+star.remove();
+
+},1000);
+
+}
+if(choice === correctAnswer){
+
+score++;
+
+document.getElementById("score")
+.innerHTML = score;
+
+document.getElementById("feedback")
+.innerHTML =
+"<span class='correct'>✔ Correct!</span>";
+
+createStarBurst();
+
+const correctSound =
+document.getElementById("correctSound");
+
+correctSound.currentTime = 0;
+correctSound.play();
+
+}
+function finishGame(){
+
+document.getElementById("gameScreen")
+.classList.add("hidden");
+
+document.getElementById("finishScreen")
+.classList.remove("hidden");
+
+document.getElementById("finalScore")
+.innerHTML =
+"Score: " +
+score +
+" / " +
+totalRounds;
+
+launchConfetti();
+
+const clapSound =
+document.getElementById("clapSound");
+
+clapSound.currentTime = 0;
+clapSound.play();
+
+speak(
+"Excellent work! Great Job!"
+);
+
+}
+window.onload = function(){
+
+setTimeout(()=>{
+
+speak(
+"Welcome to the Left and Right Game. Press Start to begin."
+);
+
+},1000);
+
+};
