@@ -4,760 +4,544 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Left and Right Game</title>
 
 <style>
 
-/* PART 2 CSS WILL GO HERE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #dbeafe, #fef9c3);
+  overflow: hidden;
+}
+
+.screen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* LOGO */
+.logo {
+  width: 220px;
+  max-width: 80%;
+  margin-bottom: 30px;
+  border-radius: 16px;
+}
+
+/* BUTTON */
+.startBtn {
+  padding: 18px 40px;
+  font-size: 28px;
+  font-weight: bold;
+  border: none;
+  border-radius: 15px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.startBtn:hover {
+  transform: scale(1.05);
+}
+
+/* SCORE */
+.scoreBoard {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #1e40af;
+}
+
+/* INSTRUCTION */
+.instruction {
+  font-size: 50px;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 40px;
+  text-align: center;
+  padding: 10px;
+}
+
+/* OPTIONS */
+.options {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+
+/* LEFT RIGHT LABELS */
+.sideLabel {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #2563eb;
+}
+
+/* CARD */
+.card {
+  width: 340px;
+  height: 340px;
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: .3s;
+  border: 4px solid transparent;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  border-color: #2563eb;
+}
+
+.card img {
+  width: 260px;
+  height: 260px;
+  object-fit: contain;
+  pointer-events: none;
+  border-radius: 12px;
+}
+
+/* FEEDBACK */
+.feedback {
+  height: 70px;
+  margin-top: 30px;
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.correct { color: green; }
+.wrong   { color: red; }
+
+/* FINISH SCREEN */
+.celebration {
+  font-size: 90px;
+  margin-bottom: 20px;
+  animation: bounce 1s infinite;
+}
+
+#finalScore {
+  margin: 20px;
+  font-size: 36px;
+  color: #1e40af;
+}
+
+/* CONFETTI */
+.confetti {
+  position: absolute;
+  font-size: 40px;
+  animation: fall 4s linear forwards;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@keyframes fall {
+  0%   { transform: translateY(-100px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(110vh)  rotate(720deg); opacity: 0; }
+}
+
+/* STAR BURST */
+.star {
+  position: absolute;
+  font-size: 50px;
+  pointer-events: none;
+  animation: starPop 1s ease-out forwards;
+  z-index: 1000;
+}
+
+@keyframes starPop {
+  0%   { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* BOUNCE */
+@keyframes bounce {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+/* ROUND COUNTER */
+.roundCounter {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #1e40af;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+
+  .options {
+    gap: 30px;
+  }
+
+  .card {
+    width: 250px;
+    height: 250px;
+  }
+
+  .card img {
+    width: 190px;
+    height: 190px;
+  }
+
+  .instruction {
+    font-size: 34px;
+  }
+
+  .sideLabel {
+    font-size: 26px;
+  }
+
+  .scoreBoard {
+    font-size: 22px;
+  }
+
+  .roundCounter {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .card {
+    width: 155px;
+    height: 155px;
+  }
+
+  .card img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .instruction {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+
+  .sideLabel {
+    font-size: 20px;
+  }
+
+  .options {
+    gap: 16px;
+  }
+
+  .feedback {
+    font-size: 32px;
+  }
+}
 
 </style>
-
 </head>
 
 <body>
 
-<!-- START SCREEN -->
-
+<!-- ── START SCREEN ── -->
 <div id="startScreen" class="screen">
 
-<img
-src="assets/innovinelogo.png"
-class="logo"
-alt="Innovine Logo">
+  <img
+    src="assets/innovinelogo.png"
+    class="logo"
+    alt="Innovine Logo">
 
-<button
-class="startBtn"
-onclick="startGame()">
-START GAME
-</button>
-
-</div>
-
-<!-- GAME SCREEN -->
-
-<div id="gameScreen"
-class="screen hidden">
-
-<div class="scoreBoard">
-
-⭐ Score:
-<span id="score">0</span>
+  <button
+    class="startBtn"
+    onclick="startGame()">
+    ▶ START GAME
+  </button>
 
 </div>
 
-<div class="instruction"
-id="instruction">
+<!-- ── GAME SCREEN ── -->
+<div id="gameScreen" class="screen hidden">
 
-Tap LEFT
+  <div class="roundCounter" id="roundCounter">
+    Round 1 / 10
+  </div>
 
-</div>
+  <div class="scoreBoard">
+    ⭐ Score: <span id="score">0</span>
+  </div>
 
-<div class="options">
+  <div class="instruction" id="instruction">
+    👈 TAP THE LEFT PICTURE
+  </div>
 
-<!-- LEFT CARD -->
+  <div class="options">
 
-<div class="optionBox">
+    <!-- LEFT CARD -->
+    <div class="optionBox">
+      <div class="sideLabel">👈 LEFT</div>
+      <div class="card" onclick="checkAnswer('left')">
+        <img id="leftImg" src="" alt="Left option">
+      </div>
+    </div>
 
-<div class="sideLabel">
-👈 LEFT
-</div>
+    <!-- RIGHT CARD -->
+    <div class="optionBox">
+      <div class="sideLabel">RIGHT 👉</div>
+      <div class="card" onclick="checkAnswer('right')">
+        <img id="rightImg" src="" alt="Right option">
+      </div>
+    </div>
 
-<div
-class="card"
-onclick="checkAnswer('left')">
+  </div>
 
-<img
-id="leftImg"
-src="assets/apple.jpg">
-
-</div>
-
-</div>
-
-<!-- RIGHT CARD -->
-
-<div class="optionBox">
-
-<div class="sideLabel">
-RIGHT 👉
-</div>
-
-<div
-class="card"
-onclick="checkAnswer('right')">
-
-<img
-id="rightImg"
-src="assets/bee.png">
+  <div id="feedback" class="feedback"></div>
 
 </div>
 
-</div>
+<!-- ── FINISH SCREEN ── -->
+<div id="finishScreen" class="screen hidden">
+
+  <div class="celebration">🎉 🎊 🎉</div>
+
+  <h1 style="font-size:2.5rem; color:#1e40af; margin-bottom:10px;">
+    Great Job!
+  </h1>
+
+  <h2 id="finalScore"></h2>
+
+  <button
+    class="startBtn"
+    style="margin-top:30px;"
+    onclick="restartGame()">
+    🔄 PLAY AGAIN
+  </button>
 
 </div>
 
-<div
-id="feedback"
-class="feedback">
-
-</div>
-
-</div>
-
-<!-- FINISH SCREEN -->
-
-<div
-id="finishScreen"
-class="screen hidden">
-
-<div class="celebration">
-
-🎉 🎉 🎉
-
-</div>
-
-<h1>Great Job!</h1>
-
-<h2 id="finalScore"></h2>
-
-<button
-class="startBtn"
-onclick="restartGame()">
-
-PLAY AGAIN
-
-</button>
-
-</div>
-
-<!-- AUDIO FILES -->
-
-<audio
-id="correctSound"
-src="assets/correct.mp3">
-</audio>
-
-<audio
-id="wrongSound"
-src="assets/wrong.mp3">
-</audio>
-
-<audio
-id="clapSound"
-src="assets/claps.mp3">
-</audio>
+<!-- ── AUDIO ── -->
+<audio id="correctSound" src="assets/correct.mp3"></audio>
+<audio id="wrongSound"   src="assets/wrong.mp3"></audio>
+<audio id="clapSound"    src="assets/claps.mp3"></audio>
 
 <script>
 
-/* PART 3 JAVASCRIPT WILL GO HERE */
+// ── Image pool (all assets in folder) ──────────────────────────────────────
+const images = [
+  "assets/ant.png",
+  "assets/apple.jpg",
+  "assets/arrow.png",
+  "assets/ballonorange.png",
+  "assets/bee.png",
+  "assets/bow.png",
+  "assets/boy.png",
+  "assets/brinjal.png",
+  "assets/butterfly.jpg",
+  "assets/carorange.png",
+  "assets/grapes.png",
+  "assets/green.jpg",
+  "assets/orange.jpg",
+  "assets/orangefruit.png",
+  "assets/parrot.png",
+  "assets/purple.png",
+  "assets/tshirt.png"
+];
+
+// ── State ──────────────────────────────────────────────────────────────────
+let score         = 0;
+let round         = 0;
+const totalRounds = 10;
+let correctAnswer = "";
+let canClick      = true;   // prevents double-clicks during feedback delay
+
+// ── On page load ───────────────────────────────────────────────────────────
+window.onload = function () {
+  setTimeout(() => {
+    speak("Welcome to the Left and Right Game. Press Start to begin.");
+  }, 800);
+};
+
+// ── Speech ─────────────────────────────────────────────────────────────────
+function speak(text) {
+  if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate  = 0.88;
+    u.pitch = 1.1;
+    speechSynthesis.speak(u);
+  }
+}
+
+// ── Play sound ─────────────────────────────────────────────────────────────
+function playSound(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.currentTime = 0;
+  el.play().catch(() => {});
+}
+
+// ── Random image (no repeat between left & right) ─────────────────────────
+function randomImage() {
+  return images[Math.floor(Math.random() * images.length)];
+}
+
+// ── Start ──────────────────────────────────────────────────────────────────
+function startGame() {
+  score = 0;
+  round = 0;
+  document.getElementById("score").textContent = "0";
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.remove("hidden");
+  nextRound();
+}
+
+// ── Next round ─────────────────────────────────────────────────────────────
+function nextRound() {
+
+  if (round >= totalRounds) {
+    finishGame();
+    return;
+  }
+
+  round++;
+  canClick = true;
+
+  // update round counter
+  document.getElementById("roundCounter").textContent =
+    "Round " + round + " / " + totalRounds;
+
+  // pick two different images
+  let leftImage  = randomImage();
+  let rightImage = randomImage();
+  while (rightImage === leftImage) {
+    rightImage = randomImage();
+  }
+
+  document.getElementById("leftImg").src  = leftImage;
+  document.getElementById("rightImg").src = rightImage;
+
+  // randomly ask left or right
+  const askLeft = Math.random() < 0.5;
+
+  if (askLeft) {
+    correctAnswer = "left";
+    document.getElementById("instruction").innerHTML =
+      "👈 TAP THE <u>LEFT</u> PICTURE";
+    speak("Tap the LEFT picture");
+  } else {
+    correctAnswer = "right";
+    document.getElementById("instruction").innerHTML =
+      "👉 TAP THE <u>RIGHT</u> PICTURE";
+    speak("Tap the RIGHT picture");
+  }
+
+  document.getElementById("feedback").innerHTML = "";
+}
+
+// ── Check answer ───────────────────────────────────────────────────────────
+function checkAnswer(choice) {
+
+  if (!canClick) return;   // ignore taps during delay
+  canClick = false;
+
+  const feedbackEl = document.getElementById("feedback");
+
+  if (choice === correctAnswer) {
+
+    score++;
+    document.getElementById("score").textContent = score;
+    feedbackEl.innerHTML = "<span class='correct'>✔ Correct!</span>";
+
+    createStarBurst();
+    playSound("correctSound");
+
+  } else {
+
+    feedbackEl.innerHTML = "<span class='wrong'>✖ Try Again!</span>";
+    playSound("wrongSound");
+
+  }
+
+  setTimeout(nextRound, 1300);
+}
+
+// ── Finish ─────────────────────────────────────────────────────────────────
+function finishGame() {
+
+  document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("finishScreen").classList.remove("hidden");
+
+  document.getElementById("finalScore").textContent =
+    "Score: " + score + " / " + totalRounds;
+
+  launchConfetti();
+  playSound("clapSound");
+  speak("Excellent work! You scored " + score + " out of " + totalRounds + ". Great job!");
+}
+
+// ── Restart ────────────────────────────────────────────────────────────────
+function restartGame() {
+
+  score = 0;
+  round = 0;
+
+  document.getElementById("score").textContent = "0";
+  document.getElementById("finishScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.remove("hidden");
+
+  nextRound();
+}
+
+// ── Star burst on correct answer ───────────────────────────────────────────
+function createStarBurst() {
+
+  for (let i = 0; i < 3; i++) {
+    const star     = document.createElement("div");
+    star.className = "star";
+    star.innerHTML = "⭐";
+    star.style.left = (30 + Math.random() * 40) + "vw";
+    star.style.top  = (30 + Math.random() * 30) + "vh";
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 1000);
+  }
+}
+
+// ── Confetti on finish ─────────────────────────────────────────────────────
+function launchConfetti() {
+
+  const emojis = ["🎉", "⭐", "🌟", "✨", "🎊", "🏆", "🌈"];
+
+  for (let i = 0; i < 50; i++) {
+    const piece     = document.createElement("div");
+    piece.className = "confetti";
+    piece.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+    piece.style.left            = Math.random() * 100 + "vw";
+    piece.style.animationDelay  = Math.random() * 2 + "s";
+    piece.style.fontSize        = (24 + Math.random() * 24) + "px";
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 5000);
+  }
+}
 
 </script>
-
 </body>
 </html>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
-body{
-background:linear-gradient(
-135deg,
-#dbeafe,
-#fef9c3
-);
-overflow:hidden;
-}
-
-.screen{
-width:100vw;
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-}
-
-.hidden{
-display:none !important;
-}
-
-/* LOGO */
-
-.logo{
-width:220px;
-max-width:80%;
-margin-bottom:30px;
-}
-
-/* BUTTON */
-
-.startBtn{
-padding:18px 40px;
-font-size:28px;
-font-weight:bold;
-border:none;
-border-radius:15px;
-background:#2563eb;
-color:white;
-cursor:pointer;
-transition:.3s;
-}
-
-.startBtn:hover{
-transform:scale(1.05);
-}
-
-/* SCORE */
-
-.scoreBoard{
-position:absolute;
-top:20px;
-right:30px;
-font-size:28px;
-font-weight:bold;
-color:#1e40af;
-}
-
-/* INSTRUCTION */
-
-.instruction{
-font-size:50px;
-font-weight:bold;
-color:#111827;
-margin-bottom:40px;
-text-align:center;
-padding:10px;
-}
-
-/* OPTIONS */
-
-.options{
-display:flex;
-justify-content:center;
-align-items:flex-start;
-gap:80px;
-flex-wrap:wrap;
-}
-
-/* LEFT RIGHT LABELS */
-
-.sideLabel{
-font-size:36px;
-font-weight:bold;
-text-align:center;
-margin-bottom:15px;
-color:#2563eb;
-}
-
-/* CARD */
-
-.card{
-width:340px;
-height:340px;
-background:white;
-border-radius:25px;
-box-shadow:0 8px 20px rgba(0,0,0,.15);
-display:flex;
-justify-content:center;
-align-items:center;
-cursor:pointer;
-transition:.3s;
-}
-
-.card:hover{
-transform:scale(1.05);
-}
-
-.card img{
-width:260px;
-height:260px;
-object-fit:contain;
-pointer-events:none;
-}
-
-/* FEEDBACK */
-
-.feedback{
-height:70px;
-margin-top:30px;
-font-size:48px;
-font-weight:bold;
-text-align:center;
-}
-
-.correct{
-color:green;
-}
-
-.wrong{
-color:red;
-}
-
-/* FINISH SCREEN */
-
-.celebration{
-font-size:90px;
-margin-bottom:20px;
-animation:bounce 1s infinite;
-}
-
-#finalScore{
-margin:20px;
-font-size:36px;
-color:#1e40af;
-}
-
-/* ANIMATION */
-
-@keyframes bounce{
-
-0%{
-transform:translateY(0);
-}
-
-50%{
-transform:translateY(-20px);
-}
-
-100%{
-transform:translateY(0);
-}
-
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-.options{
-gap:30px;
-}
-
-.card{
-width:250px;
-height:250px;
-}
-
-.card img{
-width:180px;
-height:180px;
-}
-
-.instruction{
-font-size:34px;
-}
-
-.sideLabel{
-font-size:26px;
-}
-
-.scoreBoard{
-font-size:22px;
-}
-
-}
-const images = [
-
-"assets/ant.png",
-"assets/apple.jpg",
-"assets/arrow.png",
-"assets/ballonorange.png",
-"assets/bee.png",
-"assets/bow.png",
-"assets/boy.png",
-"assets/brinjal.png",
-"assets/butterfly.jpg",
-"assets/carorange.png",
-"assets/grapes.png",
-"assets/green.jpg",
-"assets/orange.jpg",
-"assets/orangefruit.png",
-"assets/parrot.png",
-"assets/purple.png",
-"assets/tshirt.png"
-
-];
-
-let score = 0;
-let round = 0;
-let totalRounds = 10;
-let correctAnswer = "";
-
-/* START GAME */
-
-function startGame(){
-
-document.getElementById("startScreen")
-.classList.add("hidden");
-
-document.getElementById("gameScreen")
-.classList.remove("hidden");
-
-nextRound();
-
-}
-
-/* SPEAK */
-
-function speak(text){
-
-if("speechSynthesis" in window){
-
-speechSynthesis.cancel();
-
-const speech =
-new SpeechSynthesisUtterance(text);
-
-speech.rate = 0.9;
-speech.pitch = 1;
-
-window.speechSynthesis.speak(speech);
-
-}
-
-}
-
-/* RANDOM IMAGE */
-
-function randomImage(){
-
-return images[
-Math.floor(
-Math.random() * images.length
-)
-];
-
-}
-
-/* NEXT ROUND */
-
-function nextRound(){
-
-if(round >= totalRounds){
-
-finishGame();
-return;
-
-}
-
-round++;
-
-let leftImage = randomImage();
-let rightImage = randomImage();
-
-while(leftImage === rightImage){
-
-rightImage = randomImage();
-
-}
-
-document.getElementById("leftImg").src =
-leftImage;
-
-document.getElementById("rightImg").src =
-rightImage;
-
-const askLeft =
-Math.random() < 0.5;
-
-if(askLeft){
-
-correctAnswer = "left";
-
-document.getElementById("instruction")
-.innerHTML =
-"👈 TAP THE LEFT PICTURE";
-
-speak("Tap the left picture");
-
-}else{
-
-correctAnswer = "right";
-
-document.getElementById("instruction")
-.innerHTML =
-"👉 TAP THE RIGHT PICTURE";
-
-speak("Tap the right picture");
-
-}
-
-document.getElementById("feedback")
-.innerHTML = "";
-
-}
-
-/* CHECK ANSWER */
-
-function checkAnswer(choice){
-
-if(choice === correctAnswer){
-
-score++;
-
-document.getElementById("score")
-.innerHTML = score;
-
-document.getElementById("feedback")
-.innerHTML =
-"<span class='correct'>✔ Correct!</span>";
-
-const correctSound =
-document.getElementById("correctSound");
-
-correctSound.currentTime = 0;
-correctSound.play();
-
-}else{
-
-document.getElementById("feedback")
-.innerHTML =
-"<span class='wrong'>✖ Try Again!</span>";
-
-const wrongSound =
-document.getElementById("wrongSound");
-
-wrongSound.currentTime = 0;
-wrongSound.play();
-
-}
-
-setTimeout(function(){
-
-nextRound();
-
-},1200);
-
-}
-
-/* FINISH */
-
-function finishGame(){
-
-document.getElementById("gameScreen")
-.classList.add("hidden");
-
-document.getElementById("finishScreen")
-.classList.remove("hidden");
-
-document.getElementById("finalScore")
-.innerHTML =
-"Score: " +
-score +
-" / " +
-totalRounds;
-
-const clapSound =
-document.getElementById("clapSound");
-
-clapSound.currentTime = 0;
-clapSound.play();
-
-speak(
-"Great Job! You finished the game."
-);
-
-}
-
-/* PLAY AGAIN */
-
-function restartGame(){
-
-score = 0;
-round = 0;
-
-document.getElementById("score")
-.innerHTML = "0";
-
-document.getElementById("finishScreen")
-.classList.add("hidden");
-
-document.getElementById("gameScreen")
-.classList.remove("hidden");
-
-nextRound();
-
-}
-/* CONFETTI */
-
-.confetti{
-position:absolute;
-font-size:40px;
-animation:fall 4s linear forwards;
-pointer-events:none;
-z-index:999;
-}
-
-@keyframes fall{
-
-0%{
-transform:translateY(-100px) rotate(0deg);
-opacity:1;
-}
-
-100%{
-transform:translateY(110vh) rotate(720deg);
-opacity:0;
-}
-
-}
-
-/* STAR BURST */
-
-.star{
-position:absolute;
-font-size:50px;
-pointer-events:none;
-animation:starPop 1s ease-out forwards;
-z-index:1000;
-}
-
-@keyframes starPop{
-
-0%{
-transform:scale(0);
-opacity:1;
-}
-
-100%{
-transform:scale(2);
-opacity:0;
-}
-
-}
-/* CONFETTI CELEBRATION */
-
-function launchConfetti(){
-
-const emojis = [
-"🎉",
-"⭐",
-"🌟",
-"✨",
-"🎊"
-];
-
-for(let i=0;i<40;i++){
-
-const confetti =
-document.createElement("div");
-
-confetti.className =
-"confetti";
-
-confetti.innerHTML =
-emojis[
-Math.floor(
-Math.random()*emojis.length
-)
-];
-
-confetti.style.left =
-Math.random()*100 + "vw";
-
-confetti.style.animationDelay =
-Math.random()*2 + "s";
-
-document.body.appendChild(
-confetti
-);
-
-setTimeout(()=>{
-
-confetti.remove();
-
-},5000);
-
-}
-
-}
-
-/* STAR EFFECT */
-
-function createStarBurst(){
-
-const star =
-document.createElement("div");
-
-star.className = "star";
-
-star.innerHTML = "⭐";
-
-star.style.left =
-(40 + Math.random()*20) + "vw";
-
-star.style.top =
-(40 + Math.random()*10) + "vh";
-
-document.body.appendChild(star);
-
-setTimeout(()=>{
-
-star.remove();
-
-},1000);
-
-}
-if(choice === correctAnswer){
-
-score++;
-
-document.getElementById("score")
-.innerHTML = score;
-
-document.getElementById("feedback")
-.innerHTML =
-"<span class='correct'>✔ Correct!</span>";
-
-createStarBurst();
-
-const correctSound =
-document.getElementById("correctSound");
-
-correctSound.currentTime = 0;
-correctSound.play();
-
-}
-function finishGame(){
-
-document.getElementById("gameScreen")
-.classList.add("hidden");
-
-document.getElementById("finishScreen")
-.classList.remove("hidden");
-
-document.getElementById("finalScore")
-.innerHTML =
-"Score: " +
-score +
-" / " +
-totalRounds;
-
-launchConfetti();
-
-const clapSound =
-document.getElementById("clapSound");
-
-clapSound.currentTime = 0;
-clapSound.play();
-
-speak(
-"Excellent work! Great Job!"
-);
-
-}
-window.onload = function(){
-
-setTimeout(()=>{
-
-speak(
-"Welcome to the Left and Right Game. Press Start to begin."
-);
-
-},1000);
-
-};
